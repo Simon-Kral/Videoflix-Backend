@@ -1,0 +1,21 @@
+# Visual Studio Code
+**/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Backend
+/env
+*.sqlite3
+**/migrations/**
+**/__pycache__/**
+**/tests/**
+**/media/**
+!**/__init__.py
+!**/*.rest
+
+# Custom
+*.drawio
+*.todo
