@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
+
+TESTING = 'test' in sys.argv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,14 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
+    'django_rq',
     'django_filters',
     'auth_app',
     'video_platform_app.apps.VideoPlatformAppConfig',
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -62,13 +65,30 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if not TESTING:
+    INSTALLED_APPS = [
+        *INSTALLED_APPS,
+        "debug_toolbar",
+    ]
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        *MIDDLEWARE,
+    ]
+
 CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:5500',
     'http://localhost:5500',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5500',
     'http://localhost:5500',
+    'http://127.0.0.1:4200',
     'http://localhost:4200',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
 ]
 
 ROOT_URLCONF = 'videoflix.urls'
@@ -164,7 +184,8 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "foobared"
         },
         "KEY_PREFIX": "videoflix"
     }
@@ -175,3 +196,51 @@ CACHE_TTL = 60 * 15
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        # 'USERNAME': 'some-user',
+        'PASSWORD': 'foobared',
+        'DEFAULT_TIMEOUT': 360,
+        # 'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+        #     'ssl_cert_reqs': None,
+        # },
+    },
+    # 'with-sentinel': {
+    #     'SENTINELS': [('localhost', 26736), ('localhost', 26737)],
+    #     'MASTER_NAME': 'redismaster',
+    #     'DB': 0,
+    #     # Redis username/password
+    #     'USERNAME': 'redis-user',
+    #     'PASSWORD': 'secret',
+    #     'SOCKET_TIMEOUT': 0.3,
+    #     'CONNECTION_KWARGS': {  # Eventual additional Redis connection arguments
+    #         'ssl': True
+    #     },
+    #     'SENTINEL_KWARGS': {    # Eventual Sentinel connection arguments
+    #         # If Sentinel also has auth, username/password can be passed here
+    #         'username': 'sentinel-user',
+    #         'password': 'secret',
+    #     },
+    # },
+    # 'high': {
+    #     # 'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'),  # If you're on Heroku
+    #     'HOST': 'localhost',
+    #     'PORT': 6379,
+    #     'DB': 0,
+    #     'PASSWORD': 'foobared',
+    #     'DEFAULT_TIMEOUT': 10,
+    #     # 'USERNAME': 'some-user',
+    # },
+    # 'low': {
+    #     'HOST': 'localhost',
+    #     'PORT': 6379,
+    #     'DB': 0,
+    #     'PASSWORD': 'foobared',
+    # }
+}
+
+# RQ_EXCEPTION_HANDLERS = ['path.to.my.handler']  # If you need custom exception handlers

@@ -25,8 +25,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('auth_app.api.urls')),
     path('api/', include('video_platform_app.api.urls')),
+    path('api-auth', include('rest_framework.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += debug_toolbar_urls()
+urlpatterns += [path('django-rq/', include('django_rq.urls'))]
+
+if not settings.TESTING:
+    urlpatterns = [
+        *urlpatterns,
+    ] + debug_toolbar_urls()

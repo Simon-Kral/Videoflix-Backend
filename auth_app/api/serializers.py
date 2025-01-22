@@ -2,6 +2,7 @@ from rest_framework import serializers
 from videoflix import settings
 from ..models import CustomUser
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
 
     repeated_password = serializers.CharField(write_only=True)
@@ -26,10 +27,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         if pw != repeated_password:
             raise serializers.ValidationError('passwords don\'t match.')
-        
-        return attrs
 
-        
+        return attrs
 
     def create(self, validated_data):
         """
@@ -42,7 +41,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
 
         return account
-    
+
+
 class LoginSerializer(serializers.Serializer):
     """
     Serializer for user login. Validates the email address and password for authentication.
@@ -60,12 +60,12 @@ class LoginSerializer(serializers.Serializer):
 
         if not CustomUser.objects.filter(email=email).exists():
             raise serializers.ValidationError('user not found.')
-        
+
         self.user = CustomUser.objects.get(email=email)
 
         if not self.user.check_password(password):
             raise serializers.ValidationError('wrong password.')
-        
+
         return self.user
 
     def create(self, validated_data):
@@ -74,3 +74,14 @@ class LoginSerializer(serializers.Serializer):
         """
 
         return self.user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the CustomUser model.
+    Serializes the fields 'id', 'email', 'first_name', and 'last_name' for user data.
+    """
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'first_name', 'last_name']

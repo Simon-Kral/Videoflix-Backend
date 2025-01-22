@@ -1,0 +1,171 @@
+# 
+# 
+# Description
+# 
+# This file can be used to send HTTP-Requests and view the response in Visual Studio Code directly.
+# Install Rest-Client Extension for Visual Studio Code to use this test-file:
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+# 
+# 
+# Usage
+# 
+# Enter a valid {@token} and hit the 'Send-Request'-button above the request with the django-server running.
+# The 'registration/'- and 'login/'-endpoints do not require a token.
+# The response will be previewed in a separate webview panel of Visual Studio Code.
+# The {name}.rest files contain various requests, that were used for Testing during Development.
+# You can alter the requests or create new ones to test all kinds of situations.
+# 
+# 
+# Token
+# 
+# Some requests require a valid API-Token.
+# You will get a token by sending a POST-request to the 'registration/'-endpoint with valid credentials.
+# You can use the first request of the auth.rest file in the auth_app-folder.
+# Just replace the value of the @token-variable below with the token of the response.
+# 
+# 
+# Caution
+# 
+# Keep in mind, that these are real requests and there is no test database.
+# The requests will alter the data of the projects database.
+# 
+# 
+
+@token = fbca13a9239862329ef27de05074b727df5dcda2
+### Offers
+
+GET http://127.0.0.1:8000/api/videos/?ordering=-created_at&category=
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?creator_id=2
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?min_price=150
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?max_delivery_time=5
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?search=web
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?ordering=updated_at
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/?ordering=min_price
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+POST http://127.0.0.1:8000/api/offers/
+Content-Type: application/json
+Authorization: token {{token}}
+
+{
+    "title": "Website Design",
+    "image": null,
+    "description": "Professionelles Website-Design.",
+    "details": [
+        {
+        "title": "Basic Website Development",
+        "revisions": 1,
+        "delivery_time_in_days": 7,
+        "price": 150.00,
+        "features": ["Homepage"],
+        "offer_type": "basic"
+        },
+        {
+        "title": "Standard Website Development",
+        "revisions": 6,
+        "delivery_time_in_days": 12,
+        "price": 300.00,
+        "features": ["Homepage"],
+        "offer_type": "standard"
+        },
+        {
+        "title": "Premium Website Development",
+        "revisions": 3,
+        "delivery_time_in_days": 20,
+        "price": 500.00,
+        "features": ["Homepage", "Responsive Design"],
+        "offer_type": "premium"
+        }
+    ]
+}
+
+###
+
+PATCH http://127.0.0.1:8000/api/offers/4/
+Content-Type: application/json
+Authorization: token {{token}}
+
+{
+    "description":"Ein umfassendes Grafikdesign-Paket für Unternehmen.",
+    "title":"Grafikdesign-Pakete",
+    "details":[
+        {
+        "id":13,
+        "title":"Basic Designs",
+        "revisions":"2",
+        "delivery_time_in_days":"5",
+        "price":"150",
+        "features":["Logo Design","Visitenkarte"],
+        "offer_type":"basic"
+        },
+        {
+        "id":14,
+        "title":"Standard Designs",
+        "revisions":"5",
+        "delivery_time_in_days":"7",
+        "price":"300",
+        "features":["Logo Design","Visitenkarte","Briefpapier"],
+        "offer_type":"standard"
+        },
+        {
+        "id":15,
+        "title":"Premium Designs",
+        "revisions":"10",
+        "delivery_time_in_days":"10",
+        "price":"600",
+        "features":["Logo Design","Visitenkarte","Briefpapier","Flyer"],
+        "offer_type":"premium"
+        }
+    ]
+}
+
+###
+
+DELETE http://127.0.0.1:8000/api/offers/6/
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offers/3/
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/offerdetails/13/
+Content-Type: application/json
+Authorization: token {{token}}
