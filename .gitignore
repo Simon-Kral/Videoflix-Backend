@@ -21,3 +21,4 @@
 # Custom
 *.drawio
 *.todo
+*subprocess
