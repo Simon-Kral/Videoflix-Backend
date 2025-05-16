@@ -48,7 +48,7 @@ def create_hls_command(instance):
 
 
 def create_hls_target(instance):
-    target_folder = f'/home/monti/Dev/Backend/media/videos/{instance.id}_{instance.title}'.replace(' ', '_')
+    target_folder = f'media/videos/{instance.id}_{instance.title}'.replace(' ', '_')
     os.makedirs(target_folder, exist_ok=True)
     target_file = f'{instance.id}_{instance.title}_%v.m3u8'.replace(' ', '_')
     target = os.path.join(target_folder, target_file)
@@ -124,6 +124,7 @@ def add_final_command_block(cmd, target):
 def convert_to_png(instance):
     source = instance.video.path
     target = f'thumbnails/{instance.id}_{instance.title}.png'.replace(' ', '_')
+    os.makedirs(f'media/thumbnails/', exist_ok=True)
     orig_duration = get_duration(source)
     timestamp = orig_duration / 2
 
@@ -163,43 +164,3 @@ def delete(instance):
 
     if os.path.isdir(f'media/videos/{instance.id}_{instance.title.replace(' ', '_')}'):
         shutil.rmtree(f'media/videos/{instance.id}_{instance.title.replace(' ', '_')}')
-
-
-# def convert_to_hls(instance):
-#     source = instance.video.path
-#     orig_resolution = get_resolution(source)
-#     for res in RESOLUTIONS:
-#         if res['height'] <= orig_resolution:
-#             try:
-#                 target = create_hls_target(instance, res)
-#                 convert_cmd = create_hls_command(source, target, res)
-#                 subprocess.run(convert_cmd, check=True)
-#             except:
-#                 print('an error occurred')
-
-# def create_hls_target(instance, res):
-#     target_path = f'/home/monti/Dev/Backend/media/videos/{instance.id}_{instance.title}/{res['height']}p'.replace(' ', '_')
-#     os.makedirs(target_path, exist_ok=True)
-#     target_file = f'playlist.m3u8'
-#     return os.path.join(target_path, target_file)
-
-
-# def create_hls_command(source, target, res):
-
-    # cmd = f'
-    # ffmpeg
-    # -hwaccel cuda
-    # -i {source}
-    # -vf scale={res['width']}:{res['height']}
-    # -b:v {res['bitrate']}k
-    # -b:a 192k
-    # -c:v h264_nvenc
-    # -c:a aac
-    # -f hls
-    # -hls_time 3
-    # -hls_playlist_type vod
-    # -y
-    # {target}
-    # '.split()
-
-#     return cmd

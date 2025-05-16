@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     """
     username = None
     email = models.EmailField(_("email address"), unique=True)
+    is_active = models.BooleanField(default=False)
 
     # Use the custom user manager for creating users and superusers.
     objects = CustomUserManager()

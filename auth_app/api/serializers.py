@@ -51,9 +51,6 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255, write_only=True)
 
     def validate(self, attrs):
-        """
-        Validates that the username exists and the password is correct.
-        """
 
         email = attrs.get('email')
         password = attrs.get('password')
@@ -65,6 +62,9 @@ class LoginSerializer(serializers.Serializer):
 
         if not self.user.check_password(password):
             raise serializers.ValidationError('wrong password.')
+
+        if not self.user.is_active:
+            raise serializers.ValidationError('Your account is currently inactive.')
 
         return self.user
 

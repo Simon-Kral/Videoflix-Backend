@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import sys
 from pathlib import Path
+from .config import DJANGO_SECRET_KEY, REDIS_PASSWORD, EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
 
 TESTING = 'test' in sys.argv
 
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&xx1l4k@os2jhkom#10b!!#m2s+6c0hufytdbww5po305p*%*c'
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -116,10 +117,21 @@ WSGI_APPLICATION = 'videoflix.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    # 'ENGINE': 'django.db.backends.sqlite3',
+    # 'NAME': BASE_DIR / 'db.sqlite3',
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'videoflix',
+        'USER': 'monti',
+        'PASSWORD': '>vYO~w<q6=-am`<x(z-or0E`X~n:5&RR',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'OPTIONS': {
+                'client_encoding': 'UTF8',
+        },
     }
+    # }
 }
 
 
@@ -185,9 +197,9 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "foobared"
+            "PASSWORD": REDIS_PASSWORD
         },
-        "KEY_PREFIX": "videoflix"
+        "KEY_PREFIX": "videoflix",
     }
 }
 
@@ -202,45 +214,16 @@ RQ_QUEUES = {
         'HOST': 'localhost',
         'PORT': 6379,
         'DB': 0,
-        # 'USERNAME': 'some-user',
-        'PASSWORD': 'foobared',
+        'PASSWORD': REDIS_PASSWORD,
         'DEFAULT_TIMEOUT': 360,
-        # 'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
-        #     'ssl_cert_reqs': None,
-        # },
     },
-    # 'with-sentinel': {
-    #     'SENTINELS': [('localhost', 26736), ('localhost', 26737)],
-    #     'MASTER_NAME': 'redismaster',
-    #     'DB': 0,
-    #     # Redis username/password
-    #     'USERNAME': 'redis-user',
-    #     'PASSWORD': 'secret',
-    #     'SOCKET_TIMEOUT': 0.3,
-    #     'CONNECTION_KWARGS': {  # Eventual additional Redis connection arguments
-    #         'ssl': True
-    #     },
-    #     'SENTINEL_KWARGS': {    # Eventual Sentinel connection arguments
-    #         # If Sentinel also has auth, username/password can be passed here
-    #         'username': 'sentinel-user',
-    #         'password': 'secret',
-    #     },
-    # },
-    # 'high': {
-    #     # 'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'),  # If you're on Heroku
-    #     'HOST': 'localhost',
-    #     'PORT': 6379,
-    #     'DB': 0,
-    #     'PASSWORD': 'foobared',
-    #     'DEFAULT_TIMEOUT': 10,
-    #     # 'USERNAME': 'some-user',
-    # },
-    # 'low': {
-    #     'HOST': 'localhost',
-    #     'PORT': 6379,
-    #     'DB': 0,
-    #     'PASSWORD': 'foobared',
-    # }
 }
 
-# RQ_EXCEPTION_HANDLERS = ['path.to.my.handler']  # If you need custom exception handlers
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+PASSWORD_RESET_TIMEOUT = 86400

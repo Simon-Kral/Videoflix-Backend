@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Email</title>
+		<style>
+			* {
+				font-family: 'Roboto', sans-serif;
+				font-size: 16px;
+				color: #535456;
+				line-height: 22px;
+			}
+
+			.logo {
+				margin: 24px 0px;
+			}
+
+			.purple {
+				color: #2e3edf;
+			}
+
+			.link {
+				display: flex;
+				width: fit-content;
+				margin: 24px 0px;
+				padding: 13px 24px;
+				background-color: #2e3edf;
+				border-radius: 48px;
+			}
+			.link_text {
+				font-family: 'DM Sans', sans-serif;
+				font-size: 18px;
+				font-weight: 700;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+		{% block content %} {% endblock %}
+	</body>
+</html>

@@ -31,18 +31,33 @@
 # 
 # 
 
-@token = fbca13a9239862329ef27de05074b727df5dcda2
+@token = c55268cf40a8a5c801b8785fe5b5812c3b76b6c2
+
 ### Offers
 
-GET http://127.0.0.1:8000/api/videos/?ordering=-created_at&category=
+GET http://127.0.0.1:8000/api/videos/?ordering=-created_at&category=&page_size=5
 Content-Type: application/json
 Authorization: token {{token}}
 
 ###
 
-GET http://127.0.0.1:8000/api/offers/?creator_id=2
+GET http://127.0.0.1:8000/api/videos/?category=&ordering=-created_at&page=2
 Content-Type: application/json
 Authorization: token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/watched_time/16
+Content-Type: application/json
+Authorization: token {{token}}
+
+###
+
+POST http://127.0.0.1:8000/api/watched_time/16
+Content-Type: application/json
+Authorization: token {{token}}
+
+{"watched_time": 314}
 
 ###
 
